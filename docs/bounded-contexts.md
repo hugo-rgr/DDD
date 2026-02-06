@@ -1,0 +1,9 @@
+# Bounded Contexts
+
+| Bounded Context              | Type        | Rôle / Responsabilité principale |
+|-----------------------------|-------------|----------------------------------|
+| ContexteReservation         | Core        | Ce contexte gère la réservation des places et la disponibilité associée. Il orchestre le blocage temporaire des places, leur expiration, et leur transformation en commande confirmée. Il garantit l’absence de surbooking et applique les règles critiques de cohérence métier liées au stock. Il ne gère ni le paiement ni la génération des billets. |
+| ContexteCommandePaiement    | Generic     | Ce contexte gère la confirmation des commandes et l’interaction avec le prestataire de paiement externe. Il reçoit une commande issue d’une réservation valide, déclenche le paiement et interprète son résultat. Il ne porte pas de logique métier différenciante mais fournit une capacité indispensable. |
+| ContexteBilletterie         | Supporting  | Ce contexte est responsable de la génération et de la gestion des billets après confirmation de commande. Il garantit l’unicité des billets, leur association à un événement et leur validité lors du contrôle d’accès. Il dépend des commandes confirmées mais ne décide pas des règles de vente. |
+| ContexteEvenement           | Supporting  | Ce contexte gère la création et la configuration des événements (dates, lieux, catégories, quotas, politiques d’annulation). Il structure l’offre commerciale et fournit les paramètres nécessaires aux autres contextes. Il ne gère ni la réservation ni la vente directe. |
+| ContexteNotification        | Generic     | Ce contexte est chargé d’informer les utilisateurs (emails, confirmations, notifications d’annulation). Il réagit aux événements métier publiés par les autres contextes. Il ne contient aucune logique métier critique et peut être facilement externalisé. |

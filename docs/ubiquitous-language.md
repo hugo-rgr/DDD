@@ -1,8 +1,8 @@
-# Ubiquitous Language – Version 1
+# Ubiquitous Language – Version 2
 
 
 | Terme                | Définition métier (2–4 phrases)                                                                                                                                                                                                                                                                                                       | Exemple concret                       |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
 | Evenement            | Un événement représente une activité vendue sur la plateforme, comme un concert ou un spectacle. Il possède une date, un lieu, une capacité maximale et des catégories de places. Un événement est créé par un organisateur et constitue l’unité principale de vente. Il structure toute la logique de réservation et de billetterie. | Concert de rock au Zénith le 12 mars. |
 | Place                | Une place correspond à une unité vendable permettant l’accès à un événement. Elle peut être numérotée (siège précis) ou non numérotée (placement libre). Chaque place appartient à une catégorie et ne peut être vendue qu’une seule fois. Sa disponibilité varie selon les réservations et ventes.                                   | Siège A12 rangée 3.                   |
 | CategoriePlace       | Une catégorie de place regroupe des places partageant un même prix et des caractéristiques communes. Elle permet de structurer l’offre tarifaire d’un événement. Les quotas sont souvent gérés par catégorie. Elle influence directement la stratégie commerciale.                                                                    | Catégorie VIP à 120€.                 |
@@ -22,3 +22,36 @@
 | ConfirmationCommande | La confirmation de commande marque la finalisation de la vente après paiement réussi. Elle déclenche l’envoi des billets et notifications. Elle rend la transaction irréversible sauf annulation. Elle change l’état métier.                                                                                                          | Email de confirmation reçu.           |
 | SessionPaiement      | Une session de paiement représente une tentative de transaction en cours. Elle relie le client, la commande et le prestataire de paiement. Elle possède un statut évolutif. Elle se termine par succès ou échec.                                                                                                                      | Session Stripe active.                |
 | FileAttente          | La file d’attente est un mécanisme de régulation utilisé lors de pics de trafic. Elle limite l’accès simultané à la vente. Elle protège le système contre la surcharge. Elle impacte l’expérience client.                                                                                                                             | 2000 personnes en attente.            |
+| ControleBillet       | Vérification de validité du billet à l’entrée.                                                                                                                                                                                                                                                                                        | Scan QR code valide                   |
+| PaiementValide       | Résultat métier indiquant succès du paiement.                                                                                                                                                                                                                                                                                         | Paiement accepté                      |
+| PaiementRefuse       | Résultat métier indiquant échec du paiement.                                                                                                                                                                                                                                                                                          | Carte refusée                         |
+| BilletGenere         | Événement métier indiquant qu’un billet a été créé.                                                                                                                                                                                                                                                                                   | Billet #BX123 généré                  |
+
+## Termes par contexte 
+
+| Terme                | Contexte principal       | Commentaire                           |
+|----------------------|--------------------------|---------------------------------------|
+| Evenement            | ContexteEvenement        | Défini et configuré ici               |
+| Place                | ContexteEvenement        | Stock structurel d’un événement       |
+| CategoriePlace       | ContexteEvenement        | Paramétrage commercial                |
+| Organisateur         | ContexteEvenement        | Acteur créant l’offre                 |
+| PolitiqueAnnulation  | ContexteEvenement        | Règles configurées par événement      |
+| Reservation          | ContexteReservation      | Blocage temporaire des places         |
+| Disponibilite        | ContexteReservation      | Calcul dynamique lié aux réservations |
+| DureeReservation     | ContexteReservation      | Règle temporelle métier               |
+| Panier               | ContexteReservation      | Étape pré-réservation                 |
+| Annulation           | ContexteReservation      | Décision métier avant remboursement   |
+| Commande             | ContexteCommandePaiement | Engagement ferme du client            |
+| Paiement             | ContexteCommandePaiement | Transaction financière externe        |
+| SessionPaiement      | ContexteCommandePaiement | Tentative de paiement en cours        |
+| Remboursement        | ContexteCommandePaiement | Opération financière inverse          |
+| ConfirmationCommande | ContexteCommandePaiement | Transition après succès paiement      |
+| Billet               | ContexteBilletterie      | Droit d’accès généré                  |
+| TicketElectronique   | ContexteBilletterie      | Forme numérique du billet             |
+| FileAttente          | ContexteReservation      | Régulation du flux d’accès à la vente |
+| Client               | Transverse (plusieurs)   | Connu par plusieurs contexts          |
+| Notification         | ContexteNotification     | Communication vers utilisateurs       |
+| ControleBillet       | ContexteBilletterie      | Validation entrée                     |
+| PaiementValide       | ContexteCommandePaiement | Résultat métier                       |
+| PaiementRefuse       | ContexteCommandePaiement | Résultat métier                       |
+| BilletGenere         | ContexteBilletterie      | Événement métier                      |
